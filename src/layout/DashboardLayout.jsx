@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
-import { CiDeliveryTruck } from "react-icons/ci";
+
 import { BsCreditCard2FrontFill } from "react-icons/bs";
-import { FaMotorcycle, FaUser } from 'react-icons/fa';
+import { FaMotorcycle, FaUser, FaUserCheck } from 'react-icons/fa';
 import { RiEBikeFill } from 'react-icons/ri';
 import UseRole from '../hooks/UseRole';
 
@@ -19,7 +19,7 @@ const DashboardLayout = () => {
       <div className="drawer-content">
         <nav className="navbar w-full bg-base-300">
           <label htmlFor="my-drawer-4" className="btn btn-square btn-ghost">☰</label>
-          <div className="px-4">Smart Home Dashboard</div>
+          <Link to='/'><div className="px-4">Smart Home Dashboard</div></Link>
         </nav>
         <Outlet />
       </div>
@@ -32,7 +32,7 @@ const DashboardLayout = () => {
               <Link to='/'>Homepage</Link>
             </li>
             <li>
-              <NavLink to='dashboard/users'><CiDeliveryTruck /> Users</NavLink>
+              <NavLink to='dashboard/users'><FaUserCheck /> Users</NavLink>
             </li>
             <li>
               <NavLink to='/dashboard/payment-history'><BsCreditCard2FrontFill /> Payment History</NavLink>
