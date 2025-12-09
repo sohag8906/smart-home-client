@@ -14,6 +14,12 @@ import DashboardLayout from "../layout/DashboardLayout";
 import PrivaterRoute from "../Route/PrivaterRouter";
 
 import Users from "../pages/Dashboard/Users";
+import MyProfile from "../pages/Dashboard/MyProfile";
+import MyBookings from "../pages/Dashboard/MyBookings";
+import BookingCancellation from "../pages/Dashboard/BookingCancellation";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory";
+import ServiceCard from "../pages/serviceCard/ServiceCard";
+import ServiceDetails from "../pages/services/ServiceDetails";
 
 
 export const router = createBrowserRouter([
@@ -42,7 +48,17 @@ export const router = createBrowserRouter([
        {
         path: 'service',
         Component: Services
+       },
+       {
+        path:'serviceCard',
+        Component: ServiceCard
+       },
+       {
+        path: "/services/:id", 
+         element: <ServiceDetails></ServiceDetails>
        }
+       
+       
     ]
   },
 
@@ -69,6 +85,22 @@ export const router = createBrowserRouter([
         element: <Users></Users>
         
       },
+      {
+        path: 'profile',
+        element: <MyProfile></MyProfile>
+      },
+      {
+        path:'myBookings',
+        element: <MyBookings></MyBookings>
+      },
+      {
+        path:'bookingCancellation',
+        element: <BookingCancellation></BookingCancellation>
+      },
+      {
+        path:'paymentHistory',
+        element: <PaymentHistory></PaymentHistory>
+      }
      
     ]
   }
