@@ -1,32 +1,43 @@
-import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext/AuthContext";
-
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const MyBookings = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useAuth(); // Firebase user + loading
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(true); // bookings fetch loading
+  const navigate = useNavigate();
 
-  // ✅ এখানে useEffect দিবে
+  // Redirect to login if not logged in
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate("/login");
+    }
+  }, [user, loading, navigate]);
+
+  // Fetch bookings when user is available
   useEffect(() => {
     if (!user?.email) return;
+
     console.log("Fetching bookings for:", user.email);
+    setFetching(true);
 
     fetch(`http://localhost:3000/bookings/${user.email}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Bookings fetched:", data);
-        setBookings(Array.isArray(data) ? data : []);
-        setLoading(false);
+        setBookings(Array.isArray(data) ? data : []); // object হলে empty array
+        setFetching(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error("Error fetching bookings:", err);
         setBookings([]);
-        setLoading(false);
+        setFetching(false);
       });
   }, [user?.email]);
 
-  if (loading) {
+  // Show spinner if auth loading or fetching bookings
+  if (loading || fetching) {
     return (
       <div className="flex justify-center py-10">
         <span className="loading loading-spinner text-primary loading-lg"></span>
@@ -37,6 +48,7 @@ const MyBookings = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-6">My Bookings</h2>
+
       {bookings.length === 0 ? (
         <p className="text-gray-500 text-center">You have no bookings yet.</p>
       ) : (
@@ -78,11 +90,9 @@ const MyBookings = () => {
                   </td>
                   <td>{booking.bookingLocation ?? booking.location ?? "Unknown Location"}</td>
                   <td>
-                    {booking.price ?? booking.cost ?? booking.service?.price
-                      ? (booking.price ?? booking.cost ?? booking.service?.price).toLocaleString(
-                          "en-BD"
-                        )
-                      : "0"}{" "}
+                    {(booking.cost ?? booking.price ?? booking.service?.price)?.toLocaleString(
+                      "en-BD"
+                    ) ?? "0"}{" "}
                     BDT
                   </td>
                   <td className="flex justify-center gap-2">
