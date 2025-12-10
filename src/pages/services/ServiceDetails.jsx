@@ -1,100 +1,120 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 const ServiceDetails = () => {
-  const { id } = useParams(); // service id from route
+  const { id } = useParams();
   const { user } = useAuth();
 
   const [service, setService] = useState(null);
   const [bookingDate, setBookingDate] = useState("");
   const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
 
-  // Load service details from backend
+  // Fetch service details
   useEffect(() => {
+    setLoading(true);
     fetch(`http://localhost:3000/services/${id}`)
-      .then(res => res.json())
-      .then(data => setService(data));
+      .then((res) => res.json())
+      .then((data) => {
+        setService(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch service:", err);
+        setLoading(false);
+      });
   }, [id]);
 
-  const handleBooking = (e) => {
+  const handleBooking = async (e) => {
     e.preventDefault();
-    if (!user) return alert("You need to login first!");
+
+    if (!user?.email || !user?.displayName) {
+      alert("Please login first!");
+      return;
+    }
+
+    if (!bookingDate || !location) {
+      alert("Please provide booking date and location.");
+      return;
+    }
 
     const booking = {
       serviceId: service._id,
-      serviceName: service.serviceName,
-      price: service.price,
-      unit: service.unit,
+      serviceName: service.serviceName || "Unknown Service",
+      serviceImage: service.image || "",
+      cost: service.price || 0,
+      unit: service.unit || "N/A",
       userName: user.displayName,
       userEmail: user.email,
       bookingDate,
-      location
+      location,
+      status: "pending",
+      createdAt: new Date(),
     };
 
-    fetch("http://localhost:3000/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(booking)
-    })
-      .then(res => res.json())
-      .then(data => {
-        alert("Booking Successful!");
+    try {
+      const res = await fetch("http://localhost:3000/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(booking),
+      });
+
+      const data = await res.json();
+
+      if (data.insertedId) {
+        setMessage("Booking Successful!");
         setBookingDate("");
         setLocation("");
-      });
+      } else {
+        setMessage(data.message || "Failed to book!");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("Server error while booking.");
+    }
   };
 
-  if (!service) return <p>Loading...</p>;
+  if (loading) return <p>Loading service details...</p>;
+  if (!service) return <p>Service not found.</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-secondary mb-4">{service.serviceName}</h2>
+      <h2 className="text-3xl font-bold mb-4">{service.serviceName || "Unnamed Service"}</h2>
       <img
-        src={service.image}
-        alt={service.serviceName}
-        className="w-full h-64 object-cover rounded mb-4"
+        src={service.image || "https://via.placeholder.com/600x300"}
+        alt={service.serviceName || "Service Image"}
+        className="w-full h-64 object-cover mb-4 rounded"
       />
-      <p className="mb-2"><strong>Type:</strong> {service.type}</p>
-      <p className="mb-2"><strong>Price:</strong> {service.price} BDT ({service.unit})</p>
-      <p className="mb-4">{service.description}</p>
+      <p><strong>Type:</strong> {service.type || "N/A"}</p>
+      <p><strong>Price:</strong> {service.price?.toLocaleString("en-BD") || 0} BDT ({service.unit || "N/A"})</p>
+      <p className="mb-4">{service.description || "No description available."}</p>
 
       {user ? (
-        <form onSubmit={handleBooking} className="bg-base-100 p-4 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-3">Book This Service</h3>
-          <input
-            type="text"
-            placeholder="Name"
-            value={user.displayName}
-            disabled
-            className="input input-bordered w-full mb-2"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={user.email}
-            disabled
-            className="input input-bordered w-full mb-2"
-          />
+        <form onSubmit={handleBooking} className="bg-gray-100 p-4 rounded">
           <input
             type="date"
             value={bookingDate}
             onChange={(e) => setBookingDate(e.target.value)}
-            className="input input-bordered w-full mb-2"
             required
+            className="mb-2 p-2 w-full border rounded"
           />
           <input
             type="text"
             placeholder="Location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="input input-bordered w-full mb-2"
             required
+            className="mb-2 p-2 w-full border rounded"
           />
-          <button type="submit" className="btn btn-primary w-full">Book Now</button>
+          <button type="submit" className="btn btn-primary w-full mt-2">
+            Book Now
+          </button>
+          {message && <p className="mt-2 text-center text-green-600">{message}</p>}
         </form>
       ) : (
-        <p className="text-red-500">You must login to book this service.</p>
+        <p className="text-center text-red-500">Please login to book this service.</p>
       )}
     </div>
   );

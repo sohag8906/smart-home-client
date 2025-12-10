@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom"; // react-router-dom ব্যবহার করা উচিত
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -16,20 +16,15 @@ const Services = () => {
       .catch((err) => console.error("Failed to fetch services:", err));
   }, []);
 
-  // Filter logic (Safe version)
+  // Filter logic
   const filteredServices = services.filter((service) => {
     const serviceName = service?.serviceName || "";
     const serviceType = service?.type || "";
     const servicePrice = service?.price || 0;
 
-    const matchName = serviceName
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
+    const matchName = serviceName.toLowerCase().includes(search.toLowerCase());
     const matchType = filterType ? serviceType === filterType : true;
-
     const matchMin = minPrice !== "" ? servicePrice >= Number(minPrice) : true;
-
     const matchMax = maxPrice !== "" ? servicePrice <= Number(maxPrice) : true;
 
     return matchName && matchType && matchMin && matchMax;
@@ -39,7 +34,6 @@ const Services = () => {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Search + Filter */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        {/* Search */}
         <input
           type="text"
           placeholder="Search service..."
@@ -48,11 +42,10 @@ const Services = () => {
           className="input input-bordered w-full"
         />
 
-        {/* Filter by Type */}
         <select
           className="select select-bordered"
-          onChange={(e) => setFilterType(e.target.value)}
           value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
         >
           <option value="">All Types</option>
           <option value="home">Home Decoration</option>
@@ -61,7 +54,6 @@ const Services = () => {
           <option value="office">Office Decoration</option>
         </select>
 
-        {/* Min Price */}
         <input
           type="number"
           placeholder="Min Price"
@@ -70,7 +62,6 @@ const Services = () => {
           onChange={(e) => setMinPrice(e.target.value)}
         />
 
-        {/* Max Price */}
         <input
           type="number"
           placeholder="Max Price"
@@ -96,12 +87,12 @@ const Services = () => {
               <h2 className="card-title">{service?.serviceName || "Unnamed Service"}</h2>
               <p>Type: {service?.type || "N/A"}</p>
               <p className="font-bold text-primary">
-                Price: {service?.price || 0} BDT ({service?.unit || "N/A"})
+                Price: {service?.price?.toLocaleString("en-BD") || 0} BDT ({service?.unit || "N/A"})
               </p>
 
               <div className="card-actions justify-end">
                 <Link
-                  to={`/services/:id${service?._id}`}
+                  to={`/services/${service?._id}`} // Dynamic id
                   className="btn btn-primary btn-sm"
                 >
                   View Details
