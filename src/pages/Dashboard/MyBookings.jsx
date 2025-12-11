@@ -137,11 +137,13 @@ const MyBookings = () => {
                     >
                       Cancel
                     </button>
+                    
                     <button
                       className="btn btn-sm btn-primary"
                       onClick={() => handlePay(booking._id)}
                       disabled={booking.status === "cancelled"}
                     >
+                  
                       Pay
                     </button>
                   </td>

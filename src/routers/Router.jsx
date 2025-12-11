@@ -20,6 +20,7 @@ import BookingCancellation from "../pages/Dashboard/BookingCancellation";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory";
 import ServiceCard from "../pages/serviceCard/ServiceCard";
 import ServiceDetails from "../pages/services/ServiceDetails";
+import Payment from './../pages/Dashboard/Payment';
 
 
 export const router = createBrowserRouter([
@@ -100,6 +101,10 @@ export const router = createBrowserRouter([
       {
         path:'paymentHistory',
         element: <PaymentHistory></PaymentHistory>
+      },
+      {
+        path:'payment',
+        element: <Payment></Payment>
       }
      
     ]
