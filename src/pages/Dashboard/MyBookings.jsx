@@ -1,4 +1,3 @@
-// MyBookings.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
@@ -12,12 +11,10 @@ const MyBookings = () => {
   const [fetching, setFetching] = useState(true);
   const navigate = useNavigate();
 
-  // Redirect if not logged in
   useEffect(() => {
     if (!loading && !user) navigate("/login");
   }, [user, loading, navigate]);
 
-  // Fetch bookings
   useEffect(() => {
     if (!user?.email) return;
 
@@ -37,7 +34,6 @@ const MyBookings = () => {
     fetchBookings();
   }, [user?.email, axiosSecure]);
 
-  // Cancel booking
   const handleCancel = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -53,9 +49,7 @@ const MyBookings = () => {
         const res = await axiosSecure.patch(`/bookings/${id}`, { status: "cancelled" });
         if (res.data.modifiedCount > 0) {
           Swal.fire("Cancelled!", "Booking has been cancelled.", "success");
-          setBookings(
-            bookings.map((b) => (b._id === id ? { ...b, status: "cancelled" } : b))
-          );
+          setBookings(bookings.map((b) => (b._id === id ? { ...b, status: "cancelled" } : b)));
         } else {
           Swal.fire("Failed!", "Failed to cancel booking.", "error");
         }
@@ -70,15 +64,32 @@ const MyBookings = () => {
     Swal.fire("Update", `Update booking ${id} functionality placeholder.`, "info");
   };
 
-  // Pay button
-  const handlePay = (id) => {
-    const booking = bookings.find((b) => b._id === id);
-    if (!booking || booking.status === "cancelled") {
-      Swal.fire("Error", "Cannot pay for cancelled or invalid booking.", "error");
+  const handlePayment = async (booking) => {
+    if (!user?.email) {
+      alert("Please login first");
       return;
     }
-    // Navigate to payment page with bookingId
-    navigate(`/dashboard/payment/${id}`);
+
+    const costNumber = Number(booking.price ?? booking.cost);
+    if (!costNumber || isNaN(costNumber)) {
+      alert("Invalid price for this booking");
+      return;
+    }
+
+    const paymentInfo = {
+      cost: costNumber,
+      serviceName: booking.serviceName || "Unknown Service",
+      serviceId: booking._id,
+      createdByEmail: user.email,
+    };
+
+    try {
+      const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
+      window.location.href = res.data.url;
+    } catch (err) {
+      console.error("PAYMENT ERROR 👉", err.response?.data || err.message);
+      Swal.fire("Payment Error", "Something went wrong. Check console.", "error");
+    }
   };
 
   if (loading || fetching) {
@@ -130,7 +141,7 @@ const MyBookings = () => {
                       : "No date"}
                   </td>
                   <td>{booking.location || "Unknown Location"}</td>
-                  <td>{(booking.cost ?? 0).toLocaleString("en-BD")} BDT</td>
+                  <td>{(booking.price ?? 0).toLocaleString("en-BD")} BDT</td>
                   <td className="capitalize">{booking.status}</td>
                   <td className="flex flex-wrap justify-center gap-2">
                     <button
@@ -149,10 +160,10 @@ const MyBookings = () => {
                     </button>
                     <button
                       className="btn btn-sm btn-primary flex-1 min-w-[70px]"
-                      onClick={() => handlePay(booking._id)}
+                      onClick={() => handlePayment(booking)}
                       disabled={booking.status === "cancelled"}
                     >
-                      Pay
+                       {booking.paymentStatus === "paid" ? "Paid" : "Pay"}
                     </button>
                   </td>
                 </tr>

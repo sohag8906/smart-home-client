@@ -1,18 +1,20 @@
 // ServiceDetails.jsx
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import Swal from "sweetalert2"; // ✅ Import SweetAlert2
+import Swal from "sweetalert2";
 
 const ServiceDetails = () => {
   const { id } = useParams();
   const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
 
   const [service, setService] = useState(null);
   const [bookingDate, setBookingDate] = useState("");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Fetch service details
   useEffect(() => {
     setLoading(true);
     fetch(`http://localhost:3000/services/${id}`)
@@ -48,6 +50,21 @@ const ServiceDetails = () => {
       return;
     }
 
+    // Confirm booking
+    const confirmResult = await Swal.fire({
+      title: "Confirm Booking",
+      text: `Do you want to book "${service.serviceName}" on ${bookingDate}?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Book it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (!confirmResult.isConfirmed) {
+      // User clicked cancel, nothing happens
+      return;
+    }
+
     const booking = {
       serviceId: service._id,
       serviceName: service.serviceName || service.name || "Unknown Service",
@@ -76,7 +93,11 @@ const ServiceDetails = () => {
           icon: "success",
           title: "Booking Successful",
           text: "Your service has been booked successfully!",
+        }).then(() => {
+          // Redirect to MyBookings page after alert
+          navigate("/dashboard/myBookings");
         });
+
         setBookingDate("");
         setLocation("");
       } else {
