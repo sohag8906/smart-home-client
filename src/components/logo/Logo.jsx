@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 const Logo = () => {
     return (
         <Link to='/'>
-        <div className='flex items-center space-x-3'>
+        <div className='flex items-center  space-x-3'>
     <img 
         className='w-[70px] h-[70px] rounded-full object-cover' 
         src={logo} 

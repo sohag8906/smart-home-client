@@ -35,6 +35,8 @@ import TodaySchedule from "../pages/Dashboard/TodaySchedule";
 import UpdateProjectStatus from "../pages/Dashboard/decorator/UpdateProjectStatus";
 import EarningsSummary from "../pages/Dashboard/decorator/EarningsSummary";
 import AssignedProjects from "../pages/Dashboard/decorator/AssignedProjects";
+import DecoratorHome from "../pages/Dashboard/decorator/DecoratorHome";
+
 
 
 
@@ -153,6 +155,11 @@ export const router = createBrowserRouter([
     {
       path: "decorator/earnings",
       Component: EarningsSummary
+    },
+    {
+      path:"decorator/home",
+      element: <DecoratorHome></DecoratorHome>
+      
     }
     
 

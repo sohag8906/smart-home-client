@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
 import { Link, useLocation, useNavigate } from 'react-router';
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -34,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="card mt-8 bg-base-100 w-full max-w-sm mx-auto shadow-2xl">
+    <div className="card mt-8 bg-green-200 w-full max-w-sm mx-auto shadow-2xl">
       <h3 className="text-3xl text-center mt-4">Welcome Back</h3>
       <p className="text-center mb-4">Please login</p>
 
@@ -76,8 +77,9 @@ const Login = () => {
 
       <button
         onClick={handleGoogleLogin}
-        className="btn btn-outline btn-primary w-full mb-4"
+        className="btn btn-outline btn-primary font-bold text-black w-full mb-4"
       >
+        <FcGoogle />
         Login with Google
       </button>
     </div>
