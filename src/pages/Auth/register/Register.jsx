@@ -64,7 +64,7 @@ const Register = () => {
 
     return (
         <div className="card mt-8 bg-green-200 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
-            <h3 className='text-3xl text-center'>Welcome to Smart Home</h3>
+            <h3 className='text-3xl mt-3 text-center'>Welcome to Smart Home</h3>
             <p className='text-center'>Please register</p>
             <form className="card-body" onSubmit={handleSubmit(handleRegister)}>
                 <fieldset className="fieldset">

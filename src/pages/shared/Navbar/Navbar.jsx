@@ -19,12 +19,32 @@ const Navbar = () => {
 
   const links = (
      <> 
-  <li><NavLink to="/">Home</NavLink></li> 
-  <li><NavLink to="/service">Service</NavLink></li>
-   <li><NavLink to="/about">About Us</NavLink></li>
-    <li><NavLink to="/coverage">Coverage</NavLink></li>
+  <li><NavLink to="/" className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-600 underline font-bold"
+                        : "font-bold hover:text-blue-600"
+                    }>Home</NavLink></li> 
+  <li><NavLink to="/service" className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-600 underline font-bold"
+                        : "font-bold hover:text-blue-600"
+                    }>Service</NavLink></li>
+   <li><NavLink to="/about" className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-600 underline font-bold"
+                        : "font-bold hover:text-blue-600"
+                    }>About Us</NavLink></li>
+    <li><NavLink to="/coverage" className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-600 underline font-bold"
+                        : "font-bold hover:text-blue-600"
+                    }>Coverage</NavLink></li>
      
-      {user && ( <li><NavLink to="dashboard">Dashboard</NavLink></li> )} 
+      {user && ( <li><NavLink to="dashboard" className={({ isActive }) =>
+                      isActive
+                        ? "text-blue-600 underline font-bold"
+                        : "font-bold hover:text-blue-600"
+                    }>Dashboard</NavLink></li> )} 
       </> );
 
   return (
