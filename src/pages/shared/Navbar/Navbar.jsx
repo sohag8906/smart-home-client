@@ -101,7 +101,7 @@ const Navbar = () => {
             {/* Logout Button */}
             <button
               onClick={handleLogOut}
-              className="btn btn-sm"
+              className="btn bg-green-500 text-white rounded-2xl btn-sm"
             >
               Logout
             </button>
@@ -117,7 +117,7 @@ const Navbar = () => {
                 </Link>
 
                 <Link
-                  to="/profile"
+                  to="/dashboard/profile"
                   className="block px-3 py-2 hover:bg-gray-100 rounded"
                 >
                   Profile

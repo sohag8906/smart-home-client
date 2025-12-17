@@ -146,7 +146,8 @@ const MyBookings = () => {
                       : "No date"}
                   </td>
                   <td>{booking.location || "Unknown Location"}</td>
-                  <td>{(booking.price ?? 0).toLocaleString("en-BD")} BDT</td>
+                  
+                  <td>{booking.cost?.toLocaleString("en-BD") ?? 0} BDT</td>
                   <td className="capitalize">{booking.status}</td>
                   <td className="flex flex-wrap justify-center gap-2">
                     <button

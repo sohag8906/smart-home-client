@@ -122,7 +122,7 @@ const DashboardLayout = () => {
                 <li>
                   <NavLink
                     to="admin"
-                     className={({ isActive }) =>
+                    className={({ isActive }) =>
     `flex items-center gap-2 font-bold hover:text-blue-600 ${
       isActive ? "text-blue-600 underline" : ""
     }`
