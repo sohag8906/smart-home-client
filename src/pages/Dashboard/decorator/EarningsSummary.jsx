@@ -45,13 +45,13 @@ const EarningsSummary = () => {
 
   return (
     <div className="p-4 space-y-6">
-      {/* Total Earnings */}
+     
       <div className="bg-green-100 p-6 rounded-xl shadow text-center">
         <h2 className="text-lg font-semibold text-green-700">Total Earnings</h2>
         <p className="text-3xl font-bold text-green-900 mt-2">৳ {totalEarnings.toFixed(2)}</p>
       </div>
 
-      {/* Recent Payments */}
+    
       <h2 className="text-2xl font-bold">Recent Payments</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {payments.map(p => (

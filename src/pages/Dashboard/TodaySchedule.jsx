@@ -52,13 +52,13 @@ const TodaySchedule = () => {
 
   return (
     <div className="p-4 space-y-6">
-      {/* Counter Card */}
+      
       <div className="bg-blue-100 rounded-xl p-6 shadow text-center">
         <h2 className="text-3xl font-bold text-blue-700">Today's Projects</h2>
         <p className="text-xl mt-2">{projects.length} Project{projects.length > 1 ? 's' : ''}</p>
       </div>
 
-      {/* Projects List */}
+     
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {projects.map((project) => (
           <div key={project._id} className="bg-white rounded-xl p-4 shadow border">

@@ -6,10 +6,10 @@ import Swal from "sweetalert2";
 const AssignProject = () => {
   const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, reset } = useForm();
-  const [loading, setLoading] = useState(false); // loading state
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    setLoading(true); // start loading
+    setLoading(true);
     try {
       const response = await axiosSecure.post("/projects/assign", data);
       console.log("Project assigned:", response.data);
@@ -22,7 +22,7 @@ const AssignProject = () => {
         showConfirmButton: false,
       });
 
-      reset(); // clear form
+      reset(); 
     } catch (err) {
       console.error("Assign error:", err.response?.data || err);
 
@@ -32,7 +32,7 @@ const AssignProject = () => {
         text: err.response?.data?.message || "Failed to assign project",
       });
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false); 
     }
   };
 

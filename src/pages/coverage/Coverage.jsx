@@ -5,7 +5,7 @@ import { useLoaderData } from 'react-router';
 
 const Coverage = () => {
     const position = [23.6850, 90.3563]
-    const serviceCenter = useLoaderData();
+    const servicesCenter = useLoaderData();
     const mapRef = useRef(null);
     //console.log(serviceCenter);
 
@@ -13,7 +13,7 @@ const Coverage = () => {
     e.preventDefault();
     const location = e.target.location.value;
 
-    const district = serviceCenter.find(c =>
+    const district = servicesCenter.find(c =>
         c.district.toLowerCase().includes(location.toLowerCase())
     );
 
@@ -26,12 +26,12 @@ const Coverage = () => {
 };
 
     return (
-        <div className='mt-6'>
-            <h2 className='text-5xl text-green-500 ml-4'>We are available in : 64 districts</h2>
+        <div className='mt-4'>
+            <h2 className='text-5xl text-green-500'>We are available in 64 districts</h2>
 
-            <div>
+            <div className='mt-4 mb-3'>
              <form onSubmit={handleSearch}>
-                <label className="mt-4 mb-3 ml-4 input">
+                <label className="input">
   <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <g
       strokeLinejoin="round"
@@ -60,7 +60,7 @@ const Coverage = () => {
            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
            />
              {
-                serviceCenter.map((center, index) => <Marker key={index} position={[center.latitude, center.longitude]}>
+                servicesCenter.map((center, index) => <Marker key={index} position={[center.latitude, center.longitude]}>
                <Popup>
                   <strong>{center.district}</strong> <br /> Service Area: {center.covered_area.join(', ')}.
                </Popup>

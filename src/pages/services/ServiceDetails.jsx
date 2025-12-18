@@ -1,6 +1,6 @@
 // ServiceDetails.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 
@@ -152,6 +152,7 @@ const ServiceDetails = () => {
           <button type="submit" className="btn btn-primary w-full mt-2">
             Book Now
           </button>
+          
         </form>
       ) : (
         <p className="text-center text-red-500 mt-4">

@@ -10,12 +10,12 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Email/Password login
+  
   const handleLogin = async (data) => {
     try {
       const result = await signInUser(data.email, data.password);
       console.log('User logged in:', result.user);
-      navigate(location.state?.from || '/'); // Redirect after login
+      navigate(location.state?.from || '/'); 
     } catch (error) {
       console.error('Login error:', error.message);
       alert(error.message);
