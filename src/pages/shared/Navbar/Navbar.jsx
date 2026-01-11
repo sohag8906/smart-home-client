@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import Logo from '../../../components/logo/Logo';
-import { Link, NavLink, useLocation } from 'react-router-dom'; // <-- FIXED
+import { Link, NavLink } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 
 const Navbar = () => {
-
   const { user, logOut } = useAuth();
-  const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogOut = () => {
     logOut()
@@ -17,123 +16,191 @@ const Navbar = () => {
       });
   };
 
-  const links = (
-     <> 
-  <li><NavLink to="/" className={({ isActive }) =>
-                      isActive
-                        ? "text-blue-600 underline font-bold"
-                        : "font-bold hover:text-blue-600"
-                    }>Home</NavLink></li> 
-  <li><NavLink to="/service" className={({ isActive }) =>
-                      isActive
-                        ? "text-blue-600 underline font-bold"
-                        : "font-bold hover:text-blue-600"
-                    }>Service</NavLink></li>
-   <li><NavLink to="/about" className={({ isActive }) =>
-                      isActive
-                        ? "text-blue-600 underline font-bold"
-                        : "font-bold hover:text-blue-600"
-                    }>About Us</NavLink></li>
-   <li><NavLink to="/contact" className={({ isActive }) =>
-                      isActive
-                        ? "text-blue-600 underline font-bold"
-                        : "font-bold hover:text-blue-600"
-                    }>Contact</NavLink></li>
-    <li><NavLink to="/coverage" className={({ isActive }) =>
-                      isActive
-                        ? "text-blue-600 underline font-bold"
-                        : "font-bold hover:text-blue-600"
-                    }>Coverage</NavLink></li>
-     
-      {user && ( <li><NavLink to="dashboard" className={({ isActive }) =>
-                      isActive
-                        ? "text-blue-600 underline font-bold"
-                        : "font-bold hover:text-blue-600"
-                    }>Dashboard</NavLink></li> )} 
-      </> );
+  const navLinks = [
+    { to: "/", label: "Home" },
+    { to: "/service", label: "Services" },
+    { to: "/about", label: "About" },
+    { to: "/contact", label: "Contact" },
+    { to: "/coverage", label: "Coverage" },
+    ...(user ? [{ to: "/dashboard", label: "Dashboard" }] : [])
+  ];
 
   return (
-    <div className="navbar w-full bg-indigo-100 shadow-sm">
-
-      {/* LEFT */}
-      <div className="navbar-start max-w-full">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5" fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16" />
-            </svg>
-          </div>
-
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
-            {links}
-          </ul>
-        </div>
-
-        <Logo />
-      </div>
-
-      {/* CENTER */}
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {links}
-        </ul>
-      </div>
-
-      {/* RIGHT */}
-      <div className="navbar-end relative">
-        {!user ? (
-          <Link className="btn" to="/login">Login</Link>
-        ) : (
-          <div 
-            className="relative flex items-center gap-3"
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-          >
-            {/* Profile Picture */}
-           <img
-  src={user?.photoURL || "https://via.placeholder.com/150?text=User"}
-  className="w-10 h-10 rounded-full cursor-pointer border"
-  alt="profile"
-/>
-
-
-            {/* Logout Button */}
+    <nav className="sticky top-0 z-50 w-full bg-white shadow-md">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          
+          {/* Logo and Mobile Menu Button */}
+          <div className="flex items-center">
+            {/* Mobile Menu Button */}
             <button
-              onClick={handleLogOut}
-              className="btn bg-green-500 text-white rounded-2xl btn-sm"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="lg:hidden mr-3 p-2 rounded-md text-gray-700 hover:text-green-600 hover:bg-gray-100"
+              aria-label="Menu"
             >
-              Logout
+              <svg 
+                className="w-6 h-6" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
             </button>
 
-            {/* Dropdown Menu */}
-            {open && (
-              <div className="absolute right-0 top-12 w-40 bg-white shadow-lg rounded-lg p-2 z-20">
-                <Link
-                  to="/dashboard"
-                  className="block px-3 py-2 hover:bg-gray-100 rounded"
-                >
-                  Dashboard
-                </Link>
+          {/* Logo */}
+            <Link to="/" className="flex items-center">
+              <Logo />
+              
+            </Link>
+  
+          </div>
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={({ isActive }) =>
+                  `font-medium transition-colors duration-200 ${
+                    isActive
+                      ? 'text-green-600 border-b-2 border-green-600 pb-1'
+                      : 'text-gray-700 hover:text-green-600'
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </div>
 
-                <Link
-                  to="/dashboard/profile"
-                  className="block px-3 py-2 hover:bg-gray-100 rounded"
-                >
-                  Profile
-                </Link>
+          {/* User Actions */}
+          <div className="flex items-center gap-4">
+            {!user ? (
+              <Link 
+                to="/login" 
+                className="hidden sm:inline-block px-5 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition"
+              >
+                Login
+              </Link>
+            ) : (
+              <div 
+                className="relative"
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+              >
+                <div className="flex items-center gap-3 cursor-pointer">
+                  <img
+                    src={user?.photoURL || `https://ui-avatars.com/api/?name=${user?.displayName || 'User'}&background=10b981&color=fff`}
+                    className="w-9 h-9 rounded-full border-2 border-green-100"
+                    alt="profile"
+                  />
+                  <span className="hidden md:inline font-medium text-gray-700">
+                    {user?.displayName?.split(' ')[0] || 'User'}
+                  </span>
+                </div>
+
+                {/* Profile Dropdown */}
+                {open && (
+                  <div className="absolute right-0 top-12 w-48 bg-white shadow-xl rounded-lg p-2 z-20 border border-gray-200">
+                    <div className="px-3 py-2 border-b">
+                      <p className="font-semibold text-gray-800">{user?.displayName || 'User'}</p>
+                      <p className="text-sm text-gray-500 truncate">{user?.email}</p>
+                    </div>
+                    
+                    <Link
+                      to="/dashboard"
+                      className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700"
+                      onClick={() => setOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    
+                    <Link
+                      to="/dashboard/profile"
+                      className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700"
+                      onClick={() => setOpen(false)}
+                    >
+                      My Profile
+                    </Link>
+                    
+                    <div className="border-t mt-2 pt-2">
+                      <button
+                        onClick={handleLogOut}
+                        className="block w-full text-left px-3 py-2 hover:bg-red-50 rounded text-red-600 font-medium"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
+
+            {/* Mobile Login Button */}
+            {!user && (
+              <Link 
+                to="/login" 
+                className="sm:hidden px-4 py-2 bg-green-600 text-white text-sm rounded-lg"
+              >
+                Login
+              </Link>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
-    </div>
+      {/* Mobile Menu - এইখানে সব লিংক দেখা যাবে */}
+      <div className={`lg:hidden bg-white border-t border-gray-200 transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <div className="px-4 py-4 space-y-2">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              onClick={() => setIsMenuOpen(false)}
+              className={({ isActive }) =>
+                `block px-4 py-3 rounded-lg text-base font-medium ${
+                  isActive
+                    ? 'bg-green-50 text-green-700 border-l-4 border-green-600'
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+          
+          {user && (
+            <>
+              <div className="border-t border-gray-200 pt-4 mt-4">
+                <div className="flex items-center gap-3 px-4 py-3">
+                  <img
+                    src={user?.photoURL || `https://ui-avatars.com/api/?name=${user?.displayName || 'User'}&background=10b981&color=fff`}
+                    className="w-10 h-10 rounded-full"
+                    alt="profile"
+                  />
+                  <div>
+                    <p className="font-medium text-gray-800">{user?.displayName || 'User'}</p>
+                    <p className="text-sm text-gray-500">{user?.email}</p>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleLogOut}
+                  className="w-full mt-3 px-4 py-3 bg-red-50 text-red-600 font-medium rounded-lg hover:bg-red-100"
+                >
+                  Logout
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 };
 

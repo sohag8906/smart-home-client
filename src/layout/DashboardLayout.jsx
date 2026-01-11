@@ -11,8 +11,9 @@ import {
   MdSchedule,
   MdMenu,
   MdClose,
-  MdChevronRight,
-  MdChevronDown
+  MdKeyboardArrowRight,
+  MdKeyboardArrowDown,
+  MdKeyboardArrowUp
 } from "react-icons/md";
 import { ImProfile } from "react-icons/im";
 import { TbBrandBooking } from "react-icons/tb";
@@ -149,7 +150,7 @@ const DashboardLayout = () => {
                 </div>
                 <span className="font-semibold">User Dashboard</span>
               </div>
-              {userMenuOpen ? <MdChevronDown /> : <MdChevronRight />}
+              {userMenuOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}
             </button>
             
             {userMenuOpen && (
@@ -230,7 +231,7 @@ const DashboardLayout = () => {
                   </div>
                   <span className="font-semibold">Admin Dashboard</span>
                 </div>
-                {adminMenuOpen ? <MdChevronDown /> : <MdChevronRight />}
+                {adminMenuOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}
               </button>
               
               {adminMenuOpen && (
@@ -327,7 +328,7 @@ const DashboardLayout = () => {
                   </div>
                   <span className="font-semibold">Decorator Dashboard</span>
                 </div>
-                {decoratorMenuOpen ? <MdChevronDown /> : <MdChevronRight />}
+                {decoratorMenuOpen ? <MdKeyboardArrowDown /> : <MdKeyboardArrowRight />}
               </button>
               
               {decoratorMenuOpen && (

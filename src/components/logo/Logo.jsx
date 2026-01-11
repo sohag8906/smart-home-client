@@ -12,9 +12,10 @@ const Logo = () => {
         src={logo} 
         alt="Smart Home Logo" 
     />
-    <h2 className='text-3xl font-bold italic '> <span className='text-pink-400 italic'>Style</span>
-  <span className='text-4xl text-green-400 italic'>D</span>eco<span className='text-4xl text-pink-400 italic'>r</span>
-</h2>
+   
+<span className="ml-2 text-xl font-bold text-gray-800 hidden sm:inline">
+                SmartHome<span className="text-green-600">Decor</span>
+              </span>
 
 
 </div>

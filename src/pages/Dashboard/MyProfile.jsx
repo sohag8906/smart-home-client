@@ -15,36 +15,36 @@ const MyProfile = () => {
 
   return (
     <div className="p-5 max-w-xl mx-auto">
-      <h2 className="text-3xl font-bold mb-5 text-secondary text-center">My Profile</h2>
+      <h2 className="text-3xl font-bold mb-5 text-green-600 text-center">My Profile</h2>
 
       {/* Profile Image */}
       <div className="flex justify-center mb-6">
         <img
           src={user?.photoURL || "https://i.ibb.co/yp4H0kP/user.png"}
           alt="Profile"
-          className="w-32 h-32 rounded-full border-2 border-gray-300"
+          className="w-32 h-32 rounded-full border-4 border-green-200"
         />
       </div>
 
       {/* TABLE */}
-      <div className="overflow-x-auto shadow-md rounded-lg border">
+      <div className="overflow-x-auto shadow-md rounded-lg border border-gray-200">
         <table className="table w-full">
           <tbody>
-            <tr>
-              <th className="bg-gray-100 w-40">Name</th>
-              <td>{userData.displayName || user?.displayName}</td>
+            <tr className="hover:bg-gray-50">
+              <th className="bg-green-50 w-40 text-green-700">Name</th>
+              <td className="text-gray-800">{userData.displayName || user?.displayName || "Not set"}</td>
             </tr>
-            <tr>
-              <th className="bg-gray-100">Email</th>
-              <td>{userData.email || user?.email}</td>
+            <tr className="hover:bg-gray-50">
+              <th className="bg-green-50 text-green-700">Email</th>
+              <td className="text-gray-800">{userData.email || user?.email || "Not available"}</td>
             </tr>
-            <tr>
-              <th className="bg-gray-100">Role</th>
-              <td>{userData.role || "User"}</td>
+            <tr className="hover:bg-gray-50">
+              <th className="bg-green-50 text-green-700">Role</th>
+              <td className="text-gray-800">{userData.role || "User"}</td>
             </tr>
-            <tr>
-              <th className="bg-gray-100">Joined</th>
-              <td>
+            <tr className="hover:bg-gray-50">
+              <th className="bg-green-50 text-green-700">Joined</th>
+              <td className="text-gray-800">
                 {userData.createdAt
                   ? new Date(userData.createdAt).toLocaleDateString()
                   : "N/A"}
@@ -56,7 +56,9 @@ const MyProfile = () => {
 
       {/* Edit Button */}
       <div className="mt-6 text-center">
-        <button className="btn btn-primary">Edit Profile</button>
+        <button className="btn bg-green-600 hover:bg-green-700 text-white border-0">
+          Edit Profile
+        </button>
       </div>
     </div>
   );

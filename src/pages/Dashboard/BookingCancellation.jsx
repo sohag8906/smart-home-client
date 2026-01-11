@@ -32,35 +32,41 @@ const BookingCancellation = () => {
   if (loading) {
     return (
       <div className="flex justify-center py-10">
-        <span className="loading loading-spinner text-primary loading-lg"></span>
+        <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-6">Booking Cancellation</h2>
+    <div className="max-w-4xl mx-auto p-4">
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Cancelled Bookings</h2>
 
       {cancelledBookings.length === 0 ? (
-        <p className="text-gray-500 text-center">No cancelled bookings yet.</p>
+        <div className="text-center py-8 bg-gray-50 rounded border">
+          <p className="text-gray-500">No cancelled bookings found.</p>
+        </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="table w-full border">
-            <thead>
-              <tr className="text-center">
-                <th>Service Name</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Price</th>
+        <div className="overflow-x-auto border rounded">
+          <table className="w-full">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Service</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Date</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Location</th>
+                <th className="p-3 text-left text-sm font-medium text-gray-700">Price</th>
               </tr>
             </thead>
             <tbody>
               {cancelledBookings.map((booking) => (
-                <tr key={booking._id} className="text-center">
-                  <td>{booking.serviceName}</td>
-                  <td>{new Date(booking.bookingDate).toLocaleDateString("en-BD")}</td>
-                  <td>{booking.location}</td>
-                  <td>{booking.cost?.toLocaleString("en-BD") ?? 0} BDT</td>
+                <tr key={booking._id} className="border-t hover:bg-gray-50">
+                  <td className="p-3 text-gray-800">{booking.serviceName}</td>
+                  <td className="p-3 text-gray-600">
+                    {booking.bookingDate ? new Date(booking.bookingDate).toLocaleDateString("en-BD") : "N/A"}
+                  </td>
+                  <td className="p-3 text-gray-600">{booking.location}</td>
+                  <td className="p-3 text-gray-800 font-medium">
+                    {booking.cost?.toLocaleString("en-BD") ?? 0} BDT
+                  </td>
                 </tr>
               ))}
             </tbody>
