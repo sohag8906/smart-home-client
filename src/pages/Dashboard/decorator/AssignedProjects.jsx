@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { Link } from "react-router";
 
 const AssignProject = () => {
   const axiosSecure = useAxiosSecure();
@@ -23,7 +22,7 @@ const AssignProject = () => {
         showConfirmButton: false,
       });
 
-      reset(); 
+      reset();
     } catch (err) {
       console.error("Assign error:", err.response?.data || err);
 
@@ -33,11 +32,9 @@ const AssignProject = () => {
         text: err.response?.data?.message || "Failed to assign project",
       });
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
-
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -93,8 +90,7 @@ const AssignProject = () => {
               type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition-colors"
             >
-              <Link to='decorator/todaysSchedule'>Assign Project</Link>
-              
+              Assign Project
             </button>
           </form>
         )}

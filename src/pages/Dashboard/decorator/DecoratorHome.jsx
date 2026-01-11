@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { 
+  FiCalendar, 
+  FiDollarSign, 
+  FiCheckCircle, 
+  FiClock, 
+  FiUser,
+  FiHome,
+  FiTrendingUp
+} from "react-icons/fi";
 
 const DecoratorHome = () => {
   const { user } = useAuth();
@@ -8,6 +17,11 @@ const DecoratorHome = () => {
 
   const [todayProjects, setTodayProjects] = useState([]);
   const [earnings, setEarnings] = useState([]);
+  const [stats, setStats] = useState({
+    completed: 0,
+    inProgress: 0,
+    pending: 0
+  });
   const [loading, setLoading] = useState(true);
 
   // Fetch assigned projects and earnings
@@ -16,6 +30,7 @@ const DecoratorHome = () => {
 
     const fetchData = async () => {
       try {
+        setLoading(true);
         const resProjects = await axiosSecure.get(`/projects/assigned/${user.email}`);
         const todayStr = new Date().toDateString();
 
@@ -25,10 +40,18 @@ const DecoratorHome = () => {
         );
         setTodayProjects(todayOnly);
 
-        // Earnings fetch (here static, can be dynamic)
+        // Calculate stats
+        const completed = resProjects.data.filter(p => p.status === "completed").length;
+        const inProgress = resProjects.data.filter(p => p.status === "inProgress").length;
+        const pending = resProjects.data.filter(p => p.status === "pending").length;
+        
+        setStats({ completed, inProgress, pending });
+
+        // Earnings fetch
         const resEarnings = [
-          { service: "Office Space Decoration", amount: 15000, date: "12/15/2025" },
-          { service: "Birthday Decoration", amount: 12000, date: "12/15/2025" },
+          { service: "Office Space Decoration", amount: 15000, date: "12/15/2025", status: "completed" },
+          { service: "Birthday Decoration", amount: 12000, date: "12/14/2025", status: "completed" },
+          { service: "Wedding Decoration", amount: 25000, date: "12/13/2025", status: "completed" },
         ];
         setEarnings(resEarnings);
 
@@ -43,72 +66,229 @@ const DecoratorHome = () => {
   }, [user, axiosSecure]);
 
   const totalEarnings = earnings.reduce((sum, e) => sum + e.amount, 0);
+  const totalProjects = stats.completed + stats.inProgress + stats.pending;
 
-  if (loading) return <p className="text-center py-10">Loading dashboard...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Welcome */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl p-6 shadow">
-        <h2 className="text-2xl font-bold">Welcome, {user?.displayName}</h2>
-        <p className="opacity-90 mt-1">Here is your daily overview</p>
-      </div>
-
-      {/* Today's Schedule */}
-      <div className="bg-white rounded-xl p-6 shadow">
-        <h3 className="text-xl font-semibold mb-4">📅 Today’s Schedule</h3>
-        {todayProjects.length === 0 ? (
-          <p className="text-gray-500 text-center py-6">
-            No projects assigned for today.
-          </p>
-        ) : (
-          todayProjects.map(project => (
-            <div key={project._id} className="border rounded-lg p-4 mb-3">
-              <p className="font-medium">{project.serviceName}</p>
-              <p className="text-sm text-gray-500">Client: {project.customerEmail}</p>
-              <p className="text-sm">
-                Status:{" "}
-                <span className={`px-2 py-1 rounded text-white ${
-                  project.status === "completed" ? "bg-green-500" :
-                  project.status === "inProgress" ? "bg-yellow-500" : "bg-gray-400"
-                }`}>
-                  {project.status}
-                </span>
-              </p>
+    <div className="p-4 md:p-6 space-y-6">
+      {/* Welcome Card */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl p-6 shadow-lg">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold">Welcome back, {user?.displayName || "Decorator"}!</h2>
+            <p className="opacity-90 mt-2">Here's your daily overview and schedule</p>
+          </div>
+          <div className="mt-4 md:mt-0 bg-white/20 rounded-lg p-3">
+            <div className="flex items-center gap-2">
+              <FiCalendar className="text-xl" />
+              <span>{new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}</span>
             </div>
-          ))
-        )}
+          </div>
+        </div>
       </div>
 
-      {/* Earnings Summary */}
-      <div className="bg-white rounded-xl p-6 shadow">
-        <h3 className="text-xl font-semibold mb-4">💰 Earnings Summary</h3>
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-          <p className="text-sm text-green-700">Total Earnings</p>
-          <h2 className="text-2xl font-bold text-green-800">৳ {totalEarnings}</h2>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Earnings */}
+        <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-green-100 rounded-lg">
+              <FiDollarSign className="w-5 h-5 text-green-600" />
+            </div>
+            <h3 className="font-medium text-gray-700">Total Earnings</h3>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">৳ {totalEarnings.toLocaleString()}</p>
+          <p className="text-sm text-gray-600 mt-1">From all completed projects</p>
         </div>
 
-        {/* Detailed earnings */}
-        {earnings.length > 0 && (
-          <table className="w-full text-left border">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-2">Service</th>
-                <th className="p-2">Amount</th>
-                <th className="p-2">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {earnings.map((e, i) => (
-                <tr key={i} className="border-t">
-                  <td className="p-2">{e.service}</td>
-                  <td className="p-2">৳ {e.amount}</td>
-                  <td className="p-2">{e.date}</td>
-                </tr>
+        {/* Total Projects */}
+        <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <FiHome className="w-5 h-5 text-blue-600" />
+            </div>
+            <h3 className="font-medium text-gray-700">Total Projects</h3>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{totalProjects}</p>
+          <p className="text-sm text-gray-600 mt-1">All assigned projects</p>
+        </div>
+
+        {/* Completed Projects */}
+        <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-emerald-100 rounded-lg">
+              <FiCheckCircle className="w-5 h-5 text-emerald-600" />
+            </div>
+            <h3 className="font-medium text-gray-700">Completed</h3>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{stats.completed}</p>
+          <p className="text-sm text-gray-600 mt-1">Successfully delivered</p>
+        </div>
+
+        {/* In Progress */}
+        <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="p-2 bg-yellow-100 rounded-lg">
+              <FiClock className="w-5 h-5 text-yellow-600" />
+            </div>
+            <h3 className="font-medium text-gray-700">In Progress</h3>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{stats.inProgress}</p>
+          <p className="text-sm text-gray-600 mt-1">Currently working on</p>
+        </div>
+      </div>
+
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Today's Schedule */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <FiCalendar className="text-green-600" />
+              Today's Schedule
+            </h3>
+            <span className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">
+              {todayProjects.length} tasks
+            </span>
+          </div>
+
+          {todayProjects.length === 0 ? (
+            <div className="text-center py-8">
+              <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <FiCalendar className="text-gray-400 text-2xl" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">No projects for today</h3>
+              <p className="text-gray-500">Enjoy your day off!</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {todayProjects.map(project => (
+                <div 
+                  key={project._id} 
+                  className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="font-medium text-gray-900">{project.serviceName}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <FiUser className="text-gray-400 text-sm" />
+                        <p className="text-sm text-gray-600">Client: {project.customerEmail}</p>
+                      </div>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      project.status === "completed" 
+                        ? "bg-green-100 text-green-800" 
+                        : project.status === "inProgress" 
+                        ? "bg-yellow-100 text-yellow-800" 
+                        : "bg-gray-100 text-gray-800"
+                    }`}>
+                      {project.status}
+                    </span>
+                  </div>
+                  {project.time && (
+                    <p className="text-sm text-gray-500 flex items-center gap-1">
+                      <FiClock className="text-sm" />
+                      Time: {project.time}
+                    </p>
+                  )}
+                </div>
               ))}
-            </tbody>
-          </table>
-        )}
+            </div>
+          )}
+        </div>
+
+        {/* Earnings Summary */}
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <FiTrendingUp className="text-green-600" />
+              Recent Earnings
+            </h3>
+            <span className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">
+              {earnings.length} payments
+            </span>
+          </div>
+
+          <div className="space-y-4">
+            {earnings.map((e, i) => (
+              <div 
+                key={i} 
+                className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <p className="font-medium text-gray-900">{e.service}</p>
+                    <p className="text-sm text-gray-600 mt-1">Date: {e.date}</p>
+                  </div>
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold">
+                    ৳ {e.amount.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FiCheckCircle className="text-green-500" />
+                  <span className="text-sm text-gray-600">Payment {e.status}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Total Earnings Summary */}
+          {earnings.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-gray-700">Total Earnings</span>
+                <span className="text-2xl font-bold text-green-700">৳ {totalEarnings.toLocaleString()}</span>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">From all completed projects this month</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button className="border border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors">
+            <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+              <FiCalendar className="text-blue-600 text-xl" />
+            </div>
+            <p className="font-medium text-gray-800">View Calendar</p>
+          </button>
+          
+          <button className="border border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors">
+            <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-3">
+              <FiCheckCircle className="text-green-600 text-xl" />
+            </div>
+            <p className="font-medium text-gray-800">Update Status</p>
+          </button>
+          
+          <button className="border border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors">
+            <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-3">
+              <FiDollarSign className="text-purple-600 text-xl" />
+            </div>
+            <p className="font-medium text-gray-800">View Payments</p>
+          </button>
+          
+          <button className="border border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors">
+            <div className="mx-auto w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-3">
+              <FiUser className="text-yellow-600 text-xl" />
+            </div>
+            <p className="font-medium text-gray-800">Client List</p>
+          </button>
+        </div>
       </div>
     </div>
   );
