@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
@@ -10,7 +10,6 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  
   const handleLogin = async (data) => {
     try {
       const result = await signInUser(data.email, data.password);
@@ -22,7 +21,6 @@ const Login = () => {
     }
   };
 
-  // Google login
   const handleGoogleLogin = async () => {
     try {
       const result = await signInGoogle();
@@ -35,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <div className="card mt-8 bg-green-200 w-full max-w-sm mx-auto shadow-2xl">
+    <div className="card mt-8 w-full max-w-sm mx-auto shadow-2xl bg-green-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
       <h3 className="text-3xl text-center mt-4">Welcome Back</h3>
       <p className="text-center mb-4">Please login</p>
 
@@ -44,7 +42,7 @@ const Login = () => {
         <input
           type="email"
           placeholder="Email"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full bg-white dark:bg-gray-700 dark:text-gray-100"
           {...register('email', { required: true })}
         />
         {errors.email && <p className="text-red-500 text-sm">Email is required</p>}
@@ -53,33 +51,35 @@ const Login = () => {
         <input
           type="password"
           placeholder="Password"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full bg-white dark:bg-gray-700 dark:text-gray-100"
           {...register('password', { required: true, minLength: 6 })}
         />
         {errors.password?.type === 'required' && <p className="text-red-500 text-sm">Password is required</p>}
         {errors.password?.type === 'minLength' && <p className="text-red-500 text-sm">Password must be at least 6 characters</p>}
 
         <div className="mt-2">
-          <a className="link link-hover text-sm">Forgot password?</a>
+          <a className="link link-hover text-sm dark:text-gray-300">Forgot password?</a>
         </div>
 
-        <button type="submit" className="btn btn-neutral w-full mt-4">Login</button>
+        <button type="submit" className="btn btn-neutral w-full mt-4 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
+          Login
+        </button>
       </form>
 
-      <p className="text-center mt-4 text-sm">
+      <p className="text-center mt-4 text-sm dark:text-gray-300">
         Don't have an account? 
-        <Link to="/register" state={location.state} className="text-blue-500 underline ml-1">
+        <Link to="/register" state={location.state} className="text-blue-500 dark:text-blue-400 underline ml-1">
           Register
         </Link>
       </p>
 
-      <div className="divider">OR</div>
+      <div className="divider dark:before:bg-gray-600 dark:after:bg-gray-600">OR</div>
 
       <button
         onClick={handleGoogleLogin}
-        className="btn btn-outline btn-primary font-bold text-black w-full mb-4"
+        className="btn btn-outline btn-primary font-bold text-black dark:text-white w-full mb-4"
       >
-        <FcGoogle />
+        <FcGoogle className="mr-2" />
         Login with Google
       </button>
     </div>

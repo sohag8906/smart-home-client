@@ -42,30 +42,30 @@ const TodaySchedule = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center py-10">
-        <span className="loading loading-spinner text-primary loading-lg"></span>
+      <div className="flex justify-center py-10 dark:bg-gray-900">
+        <span className="loading loading-spinner text-primary loading-lg dark:text-blue-400"></span>
       </div>
     );
 
-  if (error) return <p className="text-red-500">{error}</p>;
-  if (projects.length === 0) return <p className="text-center py-6">No projects assigned for today.</p>;
+  if (error) return <p className="text-red-500 dark:text-red-400">{error}</p>;
+  if (projects.length === 0) return <p className="text-center py-6 dark:text-gray-300">No projects assigned for today.</p>;
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="p-4 space-y-6 dark:bg-gray-900">
       
-      <div className="bg-blue-100 rounded-xl p-6 shadow text-center">
-        <h2 className="text-3xl font-bold text-blue-700">Today's Projects</h2>
-        <p className="text-xl mt-2">{projects.length} Project{projects.length > 1 ? 's' : ''}</p>
+      <div className="bg-blue-100 dark:bg-blue-900/30 rounded-xl p-6 shadow text-center">
+        <h2 className="text-3xl font-bold text-blue-700 dark:text-blue-300">Today's Projects</h2>
+        <p className="text-xl mt-2 dark:text-gray-300">{projects.length} Project{projects.length > 1 ? 's' : ''}</p>
       </div>
 
      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {projects.map((project) => (
-          <div key={project._id} className="bg-white rounded-xl p-4 shadow border">
-            <h3 className="font-semibold text-lg">{project.serviceName}</h3>
-            <p className="text-sm text-gray-500">Client: {project.customerEmail}</p>
-            <p className="text-sm capitalize mt-1">Status: <span className="font-medium">{project.status}</span></p>
-            <p className="text-sm text-gray-400 mt-1">Date: {format(parseISO(project.date), "dd MMM yyyy")}</p>
+          <div key={project._id} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow border border-gray-200 dark:border-gray-700">
+            <h3 className="font-semibold text-lg dark:text-white">{project.serviceName}</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Client: {project.customerEmail}</p>
+            <p className="text-sm capitalize mt-1 dark:text-gray-300">Status: <span className="font-medium">{project.status}</span></p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Date: {format(parseISO(project.date), "dd MMM yyyy")}</p>
           </div>
         ))}
       </div>

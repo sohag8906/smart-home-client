@@ -112,7 +112,7 @@ const HeroSection = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group flex items-center gap-3 bg-white text-green-700 font-bold px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-2xl"
+                className="group flex items-center gap-3 bg-white text-green-700 font-bold px-8 py-4 rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-2xl dark:bg-white/90 dark:text-green-800 dark:hover:bg-white"
               >
                 <span className="text-lg">Explore Services</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
@@ -123,7 +123,7 @@ const HeroSection = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="group flex items-center gap-3 bg-transparent border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white/10 transition-all duration-300"
+                className="group flex items-center gap-3 bg-transparent border-2 border-white text-white font-bold px-8 py-4 rounded-xl hover:bg-white/10 transition-all duration-300 dark:border-white/80 dark:hover:bg-white/20"
               >
                 <Calendar className="w-5 h-5" />
                 <span className="text-lg">Book Free Consultation</span>
@@ -144,14 +144,14 @@ const HeroSection = () => {
               { value: "10+", label: "Years Experience", icon: <Star className="w-6 h-6" /> },
               { value: "24/7", label: "Support Available", icon: <Home className="w-6 h-6" /> },
             ].map((stat, index) => (
-              <div key={index} className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl">
+              <div key={index} className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-2xl dark:bg-white/5">
                 <div className="flex justify-center mb-2">
-                  <div className="p-2 bg-white/20 rounded-full">
+                  <div className="p-2 bg-white/20 rounded-full dark:bg-white/10">
                     {stat.icon}
                   </div>
                 </div>
                 <div className="text-2xl md:text-3xl font-bold">{stat.value}</div>
-                <div className="text-sm text-green-100">{stat.label}</div>
+                <div className="text-sm text-green-100 dark:text-green-200">{stat.label}</div>
               </div>
             ))}
           </motion.div>
@@ -165,12 +165,12 @@ const HeroSection = () => {
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
           <div className="flex flex-col items-center">
-            <span className="text-sm text-green-100 mb-2">Scroll to explore</span>
+            <span className="text-sm text-green-100 dark:text-green-200 mb-2">Scroll to explore</span>
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              <ChevronRight className="w-6 h-6 text-green-100 transform rotate-90" />
+              <ChevronRight className="w-6 h-6 text-green-100 dark:text-green-200 transform rotate-90" />
             </motion.div>
           </div>
         </motion.div>
@@ -184,16 +184,16 @@ const HeroSection = () => {
       </motion.div>
 
       {/* Featured Services Bar */}
-      <div className="bg-white py-8 px-4">
+      <div className="bg-white dark:bg-gray-900 py-8 px-4 transition-colors duration-300">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-wrap justify-center gap-8">
             {[
-              { icon: "🏠", label: "Home Decoration", color: "text-green-600" },
-              { icon: "💒", label: "Wedding Decor", color: "text-pink-600" },
-              { icon: "🏢", label: "Office Design", color: "text-blue-600" },
-              { icon: "🎉", label: "Event Planning", color: "text-purple-600" },
-              { icon: "🎂", label: "Birthday Parties", color: "text-yellow-600" },
-              { icon: "✨", label: "Custom Designs", color: "text-indigo-600" },
+              { icon: "🏠", label: "Home Decoration", color: "text-green-600 dark:text-green-400" },
+              { icon: "💒", label: "Wedding Decor", color: "text-pink-600 dark:text-pink-400" },
+              { icon: "🏢", label: "Office Design", color: "text-blue-600 dark:text-blue-400" },
+              { icon: "🎉", label: "Event Planning", color: "text-purple-600 dark:text-purple-400" },
+              { icon: "🎂", label: "Birthday Parties", color: "text-yellow-600 dark:text-yellow-400" },
+              { icon: "✨", label: "Custom Designs", color: "text-indigo-600 dark:text-indigo-400" },
             ].map((service, index) => (
               <motion.div
                 key={index}

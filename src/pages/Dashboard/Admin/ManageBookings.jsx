@@ -1,4 +1,3 @@
-// src/pages/Dashboard/Admin/ManageBookings.jsx
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
@@ -67,95 +66,98 @@ const ManageBookings = () => {
     });
   };
 
-if (loading) {
-  return (
-    <div className="flex justify-center py-10">
-      <span className="loading loading-spinner loading-lg text-primary"></span>
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    );
+  }
 
-if (!bookings || bookings.length === 0) {
-  return (
-    <p className="text-center text-gray-500 py-10">
-      No bookings found.
-    </p>
-  );
-}
-
+  if (!bookings || bookings.length === 0) {
+    return (
+      <p className="text-center text-gray-500 dark:text-gray-300 py-10">
+        No bookings found.
+      </p>
+    );
+  }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
-  Manage Bookings
-  <span className="bg-purple-600 text-white text-sm px-2 py-1 rounded-full">
-    {bookings.length}
-  </span>
-</h1>
+      <h1 className="text-2xl font-bold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100">
+        Manage Bookings
+        <span className="bg-purple-600 text-white text-sm px-2 py-1 rounded-full">
+          {bookings.length}
+        </span>
+      </h1>
 
-
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>User Name</th>
-            <th>Email</th>
-            <th>Service</th>
-            <th>Date</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {bookings.map((booking, index) => (
-            <tr key={booking._id}>
-              <td>{index + 1}</td>
-              <td>{booking.userName}</td>
-              <td>{booking.userEmail}</td>
-              <td>{booking.serviceName}</td>
-              <td>{booking.bookingDate}</td>
-              <td>{booking.location}</td>
-              <td>
-                <span
-                  className={`px-2 py-1 rounded text-white ${
-                    booking.status === "approved"
-                      ? "bg-green-500"
-                      : booking.status === "cancelled"
-                      ? "bg-red-500"
-                      : "bg-gray-400"
-                  }`}
-                >
-                  {booking.status === "approved"
-                    ? "Approved"
-                    : booking.status === "cancelled"
-                    ? "Cancelled"
-                    : "Pending"}
-                </span>
-              </td>
-              <td className="flex gap-2">
-                {booking.status !== "approved" && (
-                  <button
-                    onClick={() => handleUpdateStatus(booking._id, "approved")}
-                    className="btn btn-sm btn-success"
-                  >
-                    Approve
-                  </button>
-                )}
-                {booking.status !== "cancelled" && (
-                  <button
-                    onClick={() => handleUpdateStatus(booking._id, "cancelled")}
-                    className="btn btn-sm btn-error"
-                  >
-                    Cancel
-                  </button>
-                )}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="table w-full border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
+          <thead>
+            <tr className="bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+              <th className="p-3 text-left">#</th>
+              <th className="p-3 text-left">User Name</th>
+              <th className="p-3 text-left">Email</th>
+              <th className="p-3 text-left">Service</th>
+              <th className="p-3 text-left">Date</th>
+              <th className="p-3 text-left">Location</th>
+              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {bookings.map((booking, index) => (
+              <tr
+                key={booking._id}
+                className="border-t border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <td className="p-3">{index + 1}</td>
+                <td className="p-3 text-gray-800 dark:text-gray-100">{booking.userName}</td>
+                <td className="p-3 text-gray-600 dark:text-gray-300">{booking.userEmail}</td>
+                <td className="p-3 text-gray-800 dark:text-gray-100">{booking.serviceName}</td>
+                <td className="p-3 text-gray-800 dark:text-gray-100">{booking.bookingDate}</td>
+                <td className="p-3 text-gray-800 dark:text-gray-100">{booking.location}</td>
+                <td className="p-3">
+                  <span
+                    className={`px-2 py-1 rounded text-white ${
+                      booking.status === "approved"
+                        ? "bg-green-500 dark:bg-green-600"
+                        : booking.status === "cancelled"
+                        ? "bg-red-500 dark:bg-red-600"
+                        : "bg-gray-400 dark:bg-gray-600"
+                    }`}
+                  >
+                    {booking.status === "approved"
+                      ? "Approved"
+                      : booking.status === "cancelled"
+                      ? "Cancelled"
+                      : "Pending"}
+                  </span>
+                </td>
+                <td className="p-3 flex gap-2 flex-wrap">
+                  {booking.status !== "approved" && (
+                    <button
+                      onClick={() => handleUpdateStatus(booking._id, "approved")}
+                      className="btn btn-sm btn-success"
+                    >
+                      Approve
+                    </button>
+                  )}
+                  {booking.status !== "cancelled" && (
+                    <button
+                      onClick={() => handleUpdateStatus(booking._id, "cancelled")}
+                      className="btn btn-sm btn-error"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

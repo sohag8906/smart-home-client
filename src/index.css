@@ -13,3 +13,35 @@ body{
   font-optical-sizing: auto;
   font-style: normal;
 }
+
+
+/* src/index.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ডার্ক মোড ভেরিয়েবল (যদি চান) */
+:root {
+  --primary-color: #10b981;
+  --bg-color: #ffffff;
+  --text-color: #1f2937;
+}
+
+[data-theme="dark"] {
+  --primary-color: #34d399;
+  --bg-color: #111827;
+  --text-color: #f3f4f6;
+}
+
+/* বেসিক ডার্ক মোড স্টাইল */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* কাস্টম ডার্ক ক্লাস */
+.dark .custom-class {
+  background-color: #1f2937;
+}
