@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Award, Clock, Users, Shield, ThumbsUp, Headphones, Sparkles } from 'lucide-react';
+import { Link } from 'react-router';
 
 const WhyChooseUs = () => {
   const features = [
@@ -296,7 +297,7 @@ const WhyChooseUs = () => {
             }}
             className="px-8 py-3 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white font-semibold rounded-xl transition-colors duration-300 relative overflow-hidden group"
           >
-            <span className="relative z-10">Get Free Consultation</span>
+            <span className="relative z-10"> <Link to='about'>Get Free Consultation</Link> </span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500"
               initial={{ x: "-100%" }}

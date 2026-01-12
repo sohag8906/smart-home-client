@@ -25,7 +25,7 @@ const Home = () => {
           {/* Reviews */}
           <Reviews reviewsPromise={reviewsPromise} className="dark:bg-gray-900 dark:text-gray-100" />
 
-          <WhyChooseUs></WhyChooseUs>
+          <WhyChooseUs className="dark:bg-gray-900 dark:text-gray-100"></WhyChooseUs>
 
         </div>
     );
